@@ -12,8 +12,8 @@ POSTGRES_DB=os.getenv("POSTGRES_DB")
 POSTGRES_USER=os.getenv("POSTGRES_USER")
 POSTGRES_PASSWORD=os.getenv("POSTGRES_PASSWORD")
 POSTGRES_PORT=os.getenv("POSTGRES_PORT")
+POSTGRES_HOST=os.getenv("POSTGRES_HOST")
 
-SQL_URI=os.getenv("SQL_URI")
 SQL_TABLE=os.getenv("SQL_TABLE")
 
 CSV_PATH=os.getenv("CSV_PATH")
@@ -26,7 +26,7 @@ def connect_to_db():
         dbname=POSTGRES_DB,
         user=POSTGRES_USER,
         password=POSTGRES_PASSWORD,
-        host=SQL_URI,
+        host=POSTGRES_HOST,
         port=POSTGRES_PORT
     )
     return conn
