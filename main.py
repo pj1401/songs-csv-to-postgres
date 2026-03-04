@@ -17,26 +17,34 @@ POSTGRES_HOST=os.getenv("POSTGRES_HOST")
 SQL_TABLE=os.getenv("SQL_TABLE")
 
 CSV_PATH=os.getenv("CSV_PATH")
-
 HDF5_PATH=os.getenv("HDF5_PATH")
+CHUNK_SIZE=int(os.getenv("CHUNK_SIZE"))
+
+def get_csv_data(file_path, chunk_size):
+  return pd.read_csv(file_path, chunksize=chunk_size)
 
 def connect_to_db():
-    """Connect to PostgreSQL database."""
-    conn = psycopg2.connect(
-        dbname=POSTGRES_DB,
-        user=POSTGRES_USER,
-        password=POSTGRES_PASSWORD,
-        host=POSTGRES_HOST,
-        port=POSTGRES_PORT
-    )
-    return conn
+  """Connect to PostgreSQL database."""
+  conn = psycopg2.connect(
+    dbname=POSTGRES_DB,
+    user=POSTGRES_USER,
+    password=POSTGRES_PASSWORD,
+    host=POSTGRES_HOST,
+    port=POSTGRES_PORT
+  )
+  return conn
 
 def main():
-    # Connect to database
-    conn = connect_to_db()
-    print("Connected to database")
-    conn.close()
-    print("Disconnected")
+  # Read data
+  csv_data = get_csv_data(CSV_PATH, CHUNK_SIZE)
+  for chunk in csv_data:
+    print("csv data info:", chunk.info)
+
+  # Connect to database
+  conn = connect_to_db()
+  print("Connected to database")
+  conn.close()
+  print("Disconnected")
 
 if __name__ == "__main__":
-    main()
+  main()
