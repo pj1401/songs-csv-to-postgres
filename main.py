@@ -5,6 +5,9 @@ import psycopg2
 from psycopg2 import sql
 from dotenv import load_dotenv
 
+from src.extractor import read_csv_data, read_hdf5_data
+from src.transformer import transform_hdf5
+
 # Load environment variables
 load_dotenv()
 
@@ -19,9 +22,8 @@ SQL_TABLE=os.getenv("SQL_TABLE")
 CSV_PATH=os.getenv("CSV_PATH")
 HDF5_PATH=os.getenv("HDF5_PATH")
 CHUNK_SIZE=int(os.getenv("CHUNK_SIZE"))
-
-def get_csv_data(file_path, chunk_size):
-  return pd.read_csv(file_path, chunksize=chunk_size)
+HDF5_GROUP_NAME=os.getenv("HDF5_GROUP_NAME")
+HDF5_DATASET_NAME=os.getenv("HDF5_DATASET_NAME")
 
 def connect_to_db():
   """Connect to PostgreSQL database."""
@@ -36,9 +38,11 @@ def connect_to_db():
 
 def main():
   # Read data
-  csv_data = get_csv_data(CSV_PATH, CHUNK_SIZE)
+  csv_data = read_csv_data(CSV_PATH, CHUNK_SIZE)
   for chunk in csv_data:
     print("csv data info:", chunk.info)
+  hdf5_data = read_hdf5_data(HDF5_PATH, HDF5_GROUP_NAME, HDF5_DATASET_NAME)
+  transform_hdf5(hdf5_data)
 
   # Connect to database
   conn = connect_to_db()
