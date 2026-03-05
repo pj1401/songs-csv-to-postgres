@@ -6,7 +6,7 @@ from psycopg2 import sql
 from dotenv import load_dotenv
 
 from src.extractor import read_csv_data, read_hdf5_data
-from src.transformer import transform_hdf5
+from src.transformer import transform
 
 # Load environment variables
 load_dotenv()
@@ -39,10 +39,8 @@ def connect_to_db():
 def main():
   # Read data
   csv_data = read_csv_data(CSV_PATH, CHUNK_SIZE)
-  for chunk in csv_data:
-    print("csv data info:", chunk.info)
   hdf5_data = read_hdf5_data(HDF5_PATH, HDF5_GROUP_NAME, HDF5_DATASET_NAME)
-  transform_hdf5(hdf5_data)
+  combined_data = transform(csv_data, hdf5_data)
 
   # Connect to database
   conn = connect_to_db()
