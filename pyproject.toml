@@ -9,3 +9,8 @@ dependencies = [
     "python-dotenv>=1.2.2",
     "dotenv>=0.9.9",
 ]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.4",
+]
