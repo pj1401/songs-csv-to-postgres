@@ -12,13 +12,13 @@ def transform_hdf5(df: pd.DataFrame):
 
 def transform_chunk(df: pd.DataFrame, hdf5_df: pd.DataFrame):
   return pd.merge(
-      df,
-      hdf5_df,
-      on="track_id",
-      how="inner"
-    )
+    df,
+    hdf5_df,
+    on="track_id",
+    how="inner"
+  )
 
 def transform(csv_data, hdf5_df: pd.DataFrame):
-  print(hdf5_df.info)
+  hdf5_df["track_id"] = hdf5_df["track_id"].astype("str")
   for chunk in csv_data:
     print(transform_chunk(chunk, hdf5_df).info)
