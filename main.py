@@ -22,8 +22,6 @@ SQL_TABLE=os.getenv("SQL_TABLE")
 CSV_PATH=os.getenv("CSV_PATH")
 HDF5_PATH=os.getenv("HDF5_PATH")
 CHUNK_SIZE=int(os.getenv("CHUNK_SIZE"))
-HDF5_GROUP_NAME=os.getenv("HDF5_GROUP_NAME")
-HDF5_DATASET_NAME=os.getenv("HDF5_DATASET_NAME")
 
 def connect_to_db():
   """Connect to PostgreSQL database."""
@@ -39,7 +37,7 @@ def connect_to_db():
 def main():
   # Read data
   csv_data = read_csv_data(CSV_PATH, CHUNK_SIZE)
-  hdf5_data = read_hdf5_data(HDF5_PATH, HDF5_GROUP_NAME, HDF5_DATASET_NAME)
+  hdf5_data = read_hdf5_data(HDF5_PATH)
   combined_data = transform(csv_data, hdf5_data)
 
   # Connect to database
