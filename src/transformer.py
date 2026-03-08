@@ -17,8 +17,10 @@ def transform_chunk(df: pd.DataFrame, hdf5_df: pd.DataFrame):
 
   # Merge
   merged = df.merge(hdf5_df, on="track_id", how="inner")
+  merged["release"] = merged["release"].astype("str").str.strip()
+  merged = merged.rename(columns={"release": "album_name"})
   print(f"Merged shape: {merged.shape[0]}")
-  print("Merged sample rows: ", merged.head())
+  print("Merged sample rows:\n", merged.head())
 
   return merged
 
