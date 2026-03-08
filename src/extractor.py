@@ -7,7 +7,7 @@ import pandas as pd
 import h5py
 
 def read_csv_data(file_path: str, chunk_size: int):
-  return pd.read_csv(file_path, chunksize=chunk_size)
+  return pd.read_csv(file_path, chunksize=chunk_size, usecols=['track_id', 'name', 'artist', 'spotify_id', 'tags', 'genre', 'year', 'duration_ms', 'danceability', 'mode', 'valence'])
 
 def read_hdf5_data(file_path: str):
   with h5py.File(file_path, "r") as f:
