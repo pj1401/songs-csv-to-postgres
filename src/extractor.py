@@ -2,7 +2,6 @@
 Extractor module for extracting data from files.
 """
 
-import numpy as np
 import pandas as pd
 import h5py
 
@@ -23,3 +22,6 @@ def read_hdf5_data(file_path: str):
     hdf5_df = pd.concat([analysis_df, metadata_df], axis=1)
 
     return hdf5_df
+
+def read_listening_history(file_path: str, chunk_size: int):
+  return pd.read_csv(file_path, chunksize=chunk_size)
