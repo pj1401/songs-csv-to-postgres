@@ -17,7 +17,7 @@ def read_hdf5_data(file_path: str):
 
     # Read metadata group
     metadata_data = f["metadata"]["songs"][:]
-    metadata_df = pd.DataFrame(metadata_data, columns=["song_id", "release"])
+    metadata_df = pd.DataFrame(metadata_data, columns=["song_id", "release", "release_7digitalid", "artist_id"])
 
     # Align by index
     hdf5_df = pd.concat([analysis_df, metadata_df], axis=1)
