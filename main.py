@@ -5,7 +5,7 @@ import psycopg2
 from psycopg2 import sql
 from dotenv import load_dotenv
 
-from src.extractor import read_csv_data, read_hdf5_data, read_listening_history
+from src.extractor import read_csv_data, read_hdf5_data, read_playcount_data
 from src.transformer import transform
 
 # Load environment variables
@@ -39,10 +39,10 @@ def main():
   # Read data
   csv_data = read_csv_data(CSV_PATH, CHUNK_SIZE)
   hdf5_data = read_hdf5_data(HDF5_PATH)
-  listening_history = read_listening_history(CSV_LISTENING_HISTORY_PATH, CHUNK_SIZE)
+  playcount_data = read_playcount_data(CSV_LISTENING_HISTORY_PATH, CHUNK_SIZE)
 
   # Transform
-  combined_data = transform(csv_data, hdf5_data)
+  combined_data = transform(csv_data, hdf5_data, playcount_data)
 
   # Connect to database
   conn = connect_to_db()
