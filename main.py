@@ -1,10 +1,8 @@
 import os
-import pandas as pd
-import h5py
 import psycopg2
-from psycopg2 import sql
 from dotenv import load_dotenv
 
+from src.loader import seed_database
 from src.extractor import read_csv_data, read_hdf5_data, read_playcount_data
 from src.transformer import transform, transform_playcount_data
 
@@ -33,6 +31,7 @@ def connect_to_db():
     host=POSTGRES_HOST,
     port=POSTGRES_PORT
   )
+  print("Connected to database")
   return conn
 
 def main():
@@ -41,16 +40,17 @@ def main():
   hdf5_data = read_hdf5_data(HDF5_PATH)
   playcount_data = read_playcount_data(CSV_LISTENING_HISTORY_PATH, CHUNK_SIZE)
 
+  # Connect to database
+  conn = connect_to_db()
+
   # Transform
   total_playcount = transform_playcount_data(playcount_data)
   for chunk in csv_data:
     combined_data = transform(chunk, hdf5_data, total_playcount)
 
-    # TODO: Seed database
+    # Seed database
+    seed_database(conn, combined_data, SQL_TABLE)
 
-  # Connect to database
-  conn = connect_to_db()
-  print("Connected to database")
   conn.close()
   print("Disconnected")
 
