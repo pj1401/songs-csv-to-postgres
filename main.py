@@ -2,7 +2,7 @@ import os
 import psycopg2
 from dotenv import load_dotenv
 
-from src.loader import seed_database
+from src.loader import create_table, seed_database
 from src.extractor import read_csv_data, read_hdf5_data, read_playcount_data
 from src.transformer import transform, transform_playcount_data
 
@@ -44,6 +44,8 @@ def main():
 
     # Connect to database
     conn = connect_to_db()
+
+    create_table(conn, SQL_TABLE)
 
     # Transform
     total_playcount = transform_playcount_data(playcount_data)

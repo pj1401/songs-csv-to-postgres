@@ -5,6 +5,26 @@ Loader module for seeding the database.
 from psycopg2 import sql
 import pandas as pd
 
+def create_table(conn, table_name: str):
+    """Create the tracks table if it doesn't exist."""
+    cursor = conn.cursor()
+    query = sql.SQL("""
+        CREATE TABLE IF NOT EXISTS {table} (
+            track_id VARCHAR(50) PRIMARY KEY,
+            name VARCHAR(255),
+            artist VARCHAR(255),
+            album VARCHAR(255),
+            total_playcount INTEGER DEFAULT 0,
+            artist_id VARCHAR(255),
+            album_id VARCHAR(255),
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+    """).format(table=sql.Identifier(table_name))
+
+    cursor.execute(query)
+    conn.commit()
+    cursor.close()
+    print(f"Created table: '{table_name}'")
 
 def seed_database(conn, data: pd.DataFrame, table_name: str):
     """Seed the merged data into the PostgreSQL database."""
