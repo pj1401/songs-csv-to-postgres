@@ -6,7 +6,6 @@ from collections.abc import Iterator
 
 import pandas as pd
 
-
 def transform_playcount_data(playcount_data: Iterator[pd.DataFrame]) -> pd.DataFrame:
     total_playcount = pd.DataFrame()
     for chunk in playcount_data:
@@ -19,7 +18,6 @@ def transform_playcount_data(playcount_data: Iterator[pd.DataFrame]) -> pd.DataF
             .reset_index()
         )
     return total_playcount
-
 
 def merge(
     df: pd.DataFrame, hdf5_df: pd.DataFrame, total_playcount: pd.DataFrame
@@ -37,7 +35,6 @@ def merge(
 
     return merged
 
-
 def normalize(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
     # Strip whitespaces and set column names to lowercase.
@@ -50,13 +47,18 @@ def normalize(df: pd.DataFrame) -> pd.DataFrame:
     df["artist_id"] = df["artist_id"].astype("str").str.strip()
     return df
 
-
 def rename_columns(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
     df = df.rename(columns={"release": "album_name"})
     df = df.rename(columns={"release_7digitalid": "album_id"})
+    df = df.rename(columns={"playcount": "total_playcount"})
     return df
 
+def replace_NaN(df: pd.DataFrame) -> pd.DataFrame:
+    df = df.copy()
+    df["total_playcount"] = df["total_playcount"].fillna(0)
+    df["total_playcount"] = df["total_playcount"].astype("int64")
+    return df
 
 def transform(
     csv_df: Iterator[pd.DataFrame],
@@ -65,4 +67,5 @@ def transform(
 ):
     merged = merge(csv_df, hdf5_df, total_playcount)
     normalized = normalize(merged)
-    return rename_columns(normalized)
+    renamed = rename_columns(normalized)
+    return replace_NaN(renamed)

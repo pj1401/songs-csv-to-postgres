@@ -14,7 +14,7 @@ def create_table(conn, table_name: str):
             name VARCHAR(255),
             artist VARCHAR(255),
             album VARCHAR(255),
-            total_playcount INTEGER DEFAULT 0,
+            total_playcount BIGINT DEFAULT 0,  -- Use BIGINT (int64),
             artist_id VARCHAR(255),
             album_id VARCHAR(255),
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -55,6 +55,3 @@ def seed_database(conn, data: pd.DataFrame, table_name: str):
     conn.commit()
     cursor.close()
     print(f"Seeded {len(data)} rows into {table_name}.")
-
-
-# TODO: Create table if it does not exist.
