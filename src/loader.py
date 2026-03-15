@@ -12,12 +12,24 @@ def create_table(conn, table_name: str):
         CREATE TABLE IF NOT EXISTS {table} (
             track_id VARCHAR(50) PRIMARY KEY,
             name VARCHAR(255),
-            artist VARCHAR(255),
-            album VARCHAR(255),
             total_playcount BIGINT DEFAULT 0,  -- Use BIGINT (int64),
-            artist_id VARCHAR(255),
-            album_id VARCHAR(255),
+            artist_id VARCHAR(50),
+            album_id VARCHAR(50),
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (artist_id) REFERENCES artists(artist_id)),
+            FOREIGN KEY (album_id) REFERENCES albums(album_id))
+        );
+        CREATE TABLE IF NOT EXISTS artists (
+            artist_id VARCHAR(50) PRIMARY KEY,
+            artist_name VARCHAR(255),
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+        CREATE TABLE IF NOT EXISTS albums (
+            album_id VARCHAR(50) PRIMARY KEY,
+            album_name VARCHAR(255),
+            artist_id VARCHAR(50),
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (artist_id) REFERENCES artists(artist_id))
         );
     """).format(table=sql.Identifier(table_name))
 
