@@ -13,7 +13,7 @@ def create_table(conn, table_name: str):
             track_id VARCHAR(50) PRIMARY KEY,
             name VARCHAR(255),
             total_playcount BIGINT DEFAULT 0,  -- Use BIGINT (int64),
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
         CREATE TABLE IF NOT EXISTS artists (
             artist_id VARCHAR(50) PRIMARY KEY,
@@ -25,29 +25,29 @@ def create_table(conn, table_name: str):
             artist_id VARCHAR(50),
             PRIMARY KEY (track_id, artist_id),
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (track_id) REFERENCES tracks(track_id)),
-            FOREIGN KEY (artist_id) REFERENCES artists(artist_id))
+            FOREIGN KEY (track_id) REFERENCES tracks(track_id),
+            FOREIGN KEY (artist_id) REFERENCES artists(artist_id)
         );
         CREATE TABLE IF NOT EXISTS albums (
             album_id VARCHAR(50) PRIMARY KEY,
             album_name VARCHAR(255),
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
         CREATE TABLE IF NOT EXISTS tracks_albums (
             track_id VARCHAR(50),
             album_id VARCHAR(50),
             PRIMARY KEY (track_id, album_id),
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (track_id) REFERENCES tracks(track_id)),
-            FOREIGN KEY (album_id) REFERENCES albums(album_id))
+            FOREIGN KEY (track_id) REFERENCES tracks(track_id),
+            FOREIGN KEY (album_id) REFERENCES albums(album_id)
         );
         CREATE TABLE IF NOT EXISTS artists_albums (
             artist_id VARCHAR(50),
             album_id VARCHAR(50),
             PRIMARY KEY (artist_id, album_id),
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (artist_id) REFERENCES artists(artist_id)),
-            FOREIGN KEY (album_id) REFERENCES albums(album_id))
+            FOREIGN KEY (artist_id) REFERENCES artists(artist_id),
+            FOREIGN KEY (album_id) REFERENCES albums(album_id)
         );
     """).format(table=sql.Identifier(table_name))
 
