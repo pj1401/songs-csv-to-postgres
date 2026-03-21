@@ -1,3 +1,4 @@
+name: tracks-api
 services:
   db:
     image: postgres:16
